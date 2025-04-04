@@ -11,8 +11,8 @@ Route::middleware('guest')->group(function () {
     Route::view('/register', 'auth.register')->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
-    Route::view('/verify-2fa', 'verify-2fa')->name('verify-2fa');
-    Route::post('/verify-2fa', [AuthController::class, 'verifyTwoFactorCode'])->name('verify-2fa.post');
+    Route::view('/verify-2fa', 'verify-2fa')->name('verify-2fa')->middleware('check_user');
+    Route::post('/verify-2fa', [AuthController::class, 'verifyTwoFactorCode'])->name('verify-2fa.post')->middleware('check_user');
 });
 
 Route::middleware('auth')->group(function () {
@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/logout', function () {
         $user = Auth::user();
-        
+
         if ($user) {
             $user->update([
                 'two_factor_code' => null,
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
-        
+
         return redirect()->route('login')->with('success', 'Logged out successfully.');
     })->name('logout');
 });

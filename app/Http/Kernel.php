@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         '2fa.unverified' => \App\Http\Middleware\EnsureTwoFactorUnverified::class,
         '2fa.verified' => \App\Http\Middleware\TwoFactorMiddleware::class,
+        'check_user' => \App\Http\Middleware\CheckUserSession::class,
         //'disable.cache' => \App\Http\Middleware\DisableCache::class,
     ];
 }
