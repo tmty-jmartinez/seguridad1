@@ -17,8 +17,9 @@ class CheckUserSession
      */
     public function handle(Request $request, Closure $next)
     {
+        // Verificar si 'user_id' está en la sesión
         if (!Session::has('user_id')) {
-            return route('login');
+            return redirect()->route('login')->withErrors('You must log in to access this page.');
         }
 
         return $next($request);
