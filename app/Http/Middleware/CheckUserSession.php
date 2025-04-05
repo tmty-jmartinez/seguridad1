@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class CheckUserSession
 {
@@ -17,10 +18,12 @@ class CheckUserSession
      */
     public function handle(Request $request, Closure $next)
     {
-        // Verificar si 'user_id' está en la sesión
         if (!Session::has('user_id')) {
+            Log::info('Middleware CheckUserSession: user_id not found in session.');
             return redirect()->route('login')->withErrors('You must log in to access this page.');
         }
+
+        Log::info('Middleware CheckUserSession: user_id found in session.', ['user_id' => Session::get('user_id')]);
 
         return $next($request);
     }
